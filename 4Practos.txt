@@ -1,0 +1,125 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <random>
+
+const std::string ANSI_RED = "\033[1;31m";
+const std::string ANSI_RESET = "\033[0m";
+
+bool isVowel(char c) {
+    static const std::string vowels = "aeiouAEIOU";
+    return vowels.find(c) != std::string::npos;
+}
+
+bool isConsonant(char c) {
+    static const std::string consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ";
+    return consonants.find(c) != std::string::npos;
+}
+
+std::string reverse(const std::string& word) {
+    std::string reversedWord = word;
+    std::reverse(reversedWord.begin(), reversedWord.end());
+    return reversedWord;
+}
+
+std::string removeVowels(const std::string& word) {
+    std::string result = word;
+    result.erase(std::remove_if(result.begin(), result.end(), isVowel), result.end());
+    return result;
+}
+
+std::string removeConsonants(const std::string& word) {
+    std::string result = word;
+    result.erase(std::remove_if(result.begin(), result.end(), isConsonant), result.end());
+    return result;
+}
+
+std::string shuffle(const std::string& word) {
+    std::string shuffledWord = word;
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(shuffledWord.begin(), shuffledWord.end(), g);
+    return shuffledWord;
+}
+
+void printHeart() {
+    std::cout << " ❤️ ";
+}
+
+void printUwU() {
+    std::cout << "UwU ";
+    printHeart();
+    std::cout << std::endl;
+}
+
+void printOwO() {
+    std::cout << "OwO ";
+    printHeart();
+    std::cout << std::endl;
+}
+
+void printLine() {
+    std::cout << "----------------------------------------------" << std::endl;
+}
+
+int main() {
+    std::cout << "by Maxim Tkhir" << std::endl;
+    std::cout << ANSI_RED << "Программа поддерживает только английские слова!!!!" << ANSI_RESET << std::endl;
+
+    printLine();
+    printUwU();
+    printLine();
+
+    std::string word;
+    while (true) {
+        std::cout << "Введите слово (без цифр): ";
+        std::cin >> word;
+
+        if (std::any_of(word.begin(), word.end(), ::isdigit)) {
+            std::cout << "Тебе сказали написать только слово >:(" << std::endl;
+            continue;
+        }
+
+        if (!word.empty()) {
+            break;
+        }
+
+        std::cout << "Вы ничего не написали." << std::endl;
+    }
+
+    printLine();
+
+    int choice;
+    std::cout << "Выберите действие:\n"
+              << "1. Вывести слово задом наперед\n"
+              << "2. Вывести слово без гласных\n"
+              << "3. Вывести слово без согласных\n"
+              << "4. Рандомно раскидать буквы заданного слова\n"
+              << "Ваш выбор: ";
+    std::cin >> choice;
+
+    switch (choice) {
+        case 1:
+            printUwU();
+            std::cout << "Слово задом наперед: " << reverse(word) << std::endl;
+            break;
+        case 2:
+            printUwU();
+            std::cout << "Слово без гласных: " << removeVowels(word) << std::endl;
+            break;
+        case 3:
+            printUwU();
+            std::cout << "Слово без согласных: " << removeConsonants(word) << std::endl;
+            break;
+        case 4:
+            printUwU();
+            std::cout << "Рандомно раскиданные буквы: " << shuffle(word) << std::endl;
+            break;
+        default:
+            printOwO();
+            std::cout << "Неверный выбор!" << std::endl;
+            return 1;
+    }
+    printLine();
+    return 0;
+}
